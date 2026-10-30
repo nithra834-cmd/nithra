@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}AI-Powered Skill Gap Analyzer & Career Path Recommendation{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container py-4">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-7">
+                <div class="badge bg-white text-primary px-3 py-2 rounded-pill fw-bold mb-3 shadow-sm">
+                    <i class="fa-solid fa-sparkles text-purple me-1"></i> Powered by Scikit-Learn Random Forest
+                </div>
+                <h1 class="hero-title mb-3">
+                    Unlock Your Career Potential with <span class="text-gradient">Intelligent AI Guidance</span>
+                </h1>
+                <p class="hero-subtitle mb-4">
+                    Analyze your technical and soft skills, discover your top matched tech careers, pin-point critical skill gaps, and follow tailored learning roadmaps designed for college students.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    <a href="{{ url_for('register') }}" class="btn btn-primary-gradient btn-lg px-4 shadow">
+                        <i class="fa-solid fa-rocket me-2"></i> Get Started Free
+                    </a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg px-4">
+                        <i class="fa-solid fa-arrow-right-to-bracket me-2"></i> Sign In
+                    </a>
+                </div>
+                <div class="mt-4 pt-3 border-top border-white border-opacity-10 d-flex flex-wrap gap-4 text-white-50 small">
+                    <div><i class="fa-solid fa-check-circle text-success me-1"></i> 15 Assessed Skills</div>
+                    <div><i class="fa-solid fa-check-circle text-success me-1"></i> 8 Target Tech Roles</div>
+                    <div><i class="fa-solid fa-check-circle text-success me-1"></i> 98.3% Model Accuracy</div>
+                </div>
+            </div>
+            <div class="col-lg-5">
+                <div class="app-card p-4 shadow-xl text-dark">
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <div class="fw-bold text-primary"><i class="fa-solid fa-wand-magic-sparkles me-2"></i>Live AI Career Engine</div>
+                        <span class="badge bg-success-subtle text-success">Active</span>
+                    </div>
+                    <div class="p-3 rounded-3 bg-light mb-3">
+                        <div class="d-flex justify-content-between small text-muted mb-1">
+                            <span>Top Career Match</span>
+                            <span class="text-primary fw-bold">92.4% Confidence</span>
+                        </div>
+                        <div class="h5 fw-bold text-dark mb-1">Data Scientist</div>
+                        <div class="small text-muted">Python, Machine Learning, Data Analysis, SQL</div>
+                    </div>
+                    <div class="row g-2 text-center small mb-3">
+                        <div class="col-4">
+                            <div class="p-2 border rounded-2">
+                                <div class="fw-bold text-purple">11</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Tech Skills</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-2 border rounded-2">
+                                <div class="fw-bold text-primary">4</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Soft Skills</div>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="p-2 border rounded-2">
+                                <div class="fw-bold text-success">3 Tiers</div>
+                                <div class="text-muted" style="font-size: 0.75rem;">Roadmaps</div>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('register') }}" class="btn btn-blue-gradient w-100 py-2">
+                        Analyze Your Skills Now <i class="fa-solid fa-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section id="features" class="py-5">
+    <div class="container py-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge bg-purple-soft text-purple fw-bold px-3 py-1 rounded-pill mb-2">Key Features</span>
+            <h2 class="fw-bold">Everything You Need to Land Your Dream Job</h2>
+            <p class="text-muted">A complete end-to-end platform bridging the gap between student education and industry demands.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-6 col-lg-3">
+                <div class="app-card app-card-hover p-4 h-100">
+                    <div class="brand-logo-icon mb-3 bg-blue-soft text-blue">
+                        <i class="fa-solid fa-sliders"></i>
+                    </div>
+                    <h5 class="fw-bold">Interactive Assessment</h5>
+                    <p class="text-muted small">Rate your proficiency from 1 to 5 across 11 core technical skills and 4 essential soft skills.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="app-card app-card-hover p-4 h-100">
+                    <div class="brand-logo-icon mb-3 bg-purple-soft text-purple">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <h5 class="fw-bold">Machine Learning AI</h5>
+                    <p class="text-muted small">Trained Random Forest Classifier predicts top 3 best-fit careers with real confidence scores.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="app-card app-card-hover p-4 h-100">
+                    <div class="brand-logo-icon mb-3 bg-emerald-soft text-emerald">
+                        <i class="fa-solid fa-chart-radar"></i>
+                    </div>
+                    <h5 class="fw-bold">Skill Gap Analytics</h5>
+                    <p class="text-muted small">Compares student ratings directly with role benchmarks to uncover missing and weak skills.</p>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <div class="app-card app-card-hover p-4 h-100">
+                    <div class="brand-logo-icon mb-3 bg-amber-soft text-amber">
+                        <i class="fa-solid fa-diagram-project"></i>
+                    </div>
+                    <h5 class="fw-bold">Tiered Roadmaps</h5>
+                    <p class="text-muted small">Beginner, Intermediate, and Advanced topics with curated resources and practice projects.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Supported Careers Section -->
+<section id="careers" class="py-5 bg-white border-top border-bottom">
+    <div class="container py-4">
+        <div class="text-center mb-5">
+            <span class="badge bg-blue-soft text-blue fw-bold px-3 py-1 rounded-pill mb-2">Target Roles</span>
+            <h2 class="fw-bold">8 High-Demand Career Paths Evaluated</h2>
+            <p class="text-muted">Benchmarks tailored to modern technology hiring standards.</p>
+        </div>
+
+        <div class="row g-3">
+            {% set roles = [
+                ('Data Analyst', 'SQL, Excel, Data Analysis, Python', 'fa-chart-simple', '$70k - $95k'),
+                ('Data Scientist', 'Python, ML, Data Analysis, Problem Solving', 'fa-flask-vial', '$110k - $145k'),
+                ('Python Developer', 'Python, SQL, HTML, CSS, JavaScript', 'fa-brands fa-python', '$85k - $115k'),
+                ('Web Developer', 'HTML, CSS, JavaScript, Responsive Design', 'fa-code', '$75k - $100k'),
+                ('Full Stack Developer', 'HTML, CSS, JS, Python, SQL, REST APIs', 'fa-layer-group', '$95k - $130k'),
+                ('Machine Learning Engineer', 'Python, ML, Data Analysis, C++, MLOps', 'fa-microchip', '$120k - $160k'),
+                ('Software Developer', 'Java, C++, C, SQL, Algorithms', 'fa-laptop-code', '$90k - $125k'),
+                ('Database Administrator', 'SQL, Database Tuning, High Availability', 'fa-database', '$85k - $115k')
+            ] %}
+            {% for title, stack, icon, salary in roles %}
+                <div class="col-md-6 col-lg-3">
+                    <div class="p-3 border rounded-3 bg-light h-100">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <i class="{{ icon }} text-purple fs-5"></i>
+                            <h6 class="fw-bold mb-0 text-dark">{{ title }}</h6>
+                        </div>
+                        <div class="small text-muted mb-2">{{ stack }}</div>
+                        <div class="small fw-semibold text-primary"><i class="fa-solid fa-coins me-1"></i>{{ salary }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Call to action -->
+<section class="py-5 text-center">
+    <div class="container py-4">
+        <div class="app-card p-5 bg-gradient-hero text-white" style="background: var(--gradient-hero);">
+            <h2 class="fw-bold mb-3">Ready to Accelerate Your Tech Career?</h2>
+            <p class="text-white-50 max-w-600 mx-auto mb-4">Complete your assessment in less than 3 minutes and receive your personalized AI career roadmap immediately.</p>
+            <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-4 text-primary fw-bold shadow">
+                Create Free Account <i class="fa-solid fa-arrow-right ms-2"></i>
+            </a>
+        </div>
+    </div>
+</section>
+{% endblock %}

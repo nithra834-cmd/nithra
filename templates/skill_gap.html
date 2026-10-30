@@ -1,0 +1,266 @@
+{% extends "base.html" %}
+
+{% block title %}Skill Gap Analysis - AI Career Guidance{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Banner -->
+    <div class="app-card p-4 p-md-5 mb-4" style="background: var(--gradient-card);">
+        <div class="row align-items-center justify-content-between g-3">
+            <div class="col-lg-7">
+                <span class="badge bg-purple-soft text-purple fw-bold px-3 py-1 rounded-pill mb-2">Step 3: Gap Analysis</span>
+                <h2 class="fw-bold text-dark mb-2">
+                    Skill Gap Analysis: <span class="text-primary">{{ analysis.career.career_title }}</span>
+                </h2>
+                <p class="text-muted mb-0">
+                    Detailed comparison between your evaluated skills and the industry benchmarks for {{ analysis.career.career_title }}.
+                </p>
+            </div>
+            <div class="col-lg-5 text-lg-end">
+                <div class="d-inline-flex flex-column align-items-lg-end">
+                    <label class="form-label small fw-bold text-muted mb-1">Target Career Role:</label>
+                    <select class="form-select form-select-sm shadow-sm" onchange="window.location.href='/skill_gap/' + this.value" style="min-width: 240px;">
+                        {% for c in all_careers %}
+                            <option value="{{ c.id }}" {% if c.id == analysis.career.id %}selected{% endif %}>
+                                {{ c.career_title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Summary Metrics Cards -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3 col-6">
+            <div class="app-card p-3 text-center h-100">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Role Match Score</div>
+                <div class="h2 fw-bold text-primary mb-1">{{ analysis.overall_match_score }}%</div>
+                <div class="small text-muted">Benchmark alignment</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="app-card p-3 text-center h-100">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Overall Skill Gap</div>
+                <div class="h2 fw-bold text-warning mb-1">{{ analysis.overall_gap_score }}%</div>
+                <div class="small text-muted">Room for growth</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="app-card p-3 text-center h-100">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Proficient Skills</div>
+                <div class="h2 fw-bold text-success mb-1">{{ analysis.meeting_count }} / {{ analysis.total_benchmarks }}</div>
+                <div class="small text-muted">Meet or exceed standard</div>
+            </div>
+        </div>
+        <div class="col-md-3 col-6">
+            <div class="app-card p-3 text-center h-100">
+                <div class="text-muted small fw-bold text-uppercase mb-1">Skills to Improve</div>
+                <div class="h2 fw-bold text-danger mb-1">{{ analysis.weak_count + analysis.missing_count }}</div>
+                <div class="small text-muted">{{ analysis.weak_count }} weak, {{ analysis.missing_count }} missing</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row g-4 mb-4">
+        <!-- Radar Comparison Chart -->
+        <div class="col-lg-6">
+            <div class="app-card p-4 h-100">
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                    <h5 class="fw-bold text-dark mb-0">
+                        <i class="fa-solid fa-chart-radar text-purple me-2"></i>Proficiency Radar
+                    </h5>
+                    <span class="badge bg-light text-muted border">Current vs Required</span>
+                </div>
+                <div style="position: relative; height: 320px;">
+                    <canvas id="skillRadarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bar Comparison Chart -->
+        <div class="col-lg-6">
+            <div class="app-card p-4 h-100">
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                    <h5 class="fw-bold text-dark mb-0">
+                        <i class="fa-solid fa-chart-bar text-primary me-2"></i>Skill Level Comparison
+                    </h5>
+                    <span class="badge bg-light text-muted border">Rating Scale (1 - 5)</span>
+                </div>
+                <div style="position: relative; height: 320px;">
+                    <canvas id="skillBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Skill Comparisons Breakdown Table -->
+    <div class="app-card p-4 mb-4">
+        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+            <div>
+                <h5 class="fw-bold text-dark mb-1">Detailed Skill Gap Breakdown & Suggestions</h5>
+                <p class="text-muted small mb-0">Actionable insights to eliminate bottlenecks and master requirements.</p>
+            </div>
+            <a href="{{ url_for('roadmap', career_id=analysis.career.id) }}" class="btn btn-primary-gradient btn-sm px-3 shadow-sm">
+                <i class="fa-solid fa-route me-1"></i> Open Learning Roadmap
+            </a>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th style="min-width: 140px;">Skill</th>
+                        <th>Type</th>
+                        <th class="text-center">Current</th>
+                        <th class="text-center">Required</th>
+                        <th class="text-center">Gap</th>
+                        <th>Status</th>
+                        <th style="min-width: 280px;">Improvement Recommendation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for sc in analysis.skill_comparisons %}
+                    <tr>
+                        <td>
+                            <strong class="text-dark">{{ sc.skill_name }}</strong>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-muted border text-capitalize">{{ sc.skill_type }}</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-blue-soft text-blue fw-bold">{{ sc.current_level }} / 5</span>
+                        </td>
+                        <td class="text-center">
+                            <span class="badge bg-purple-soft text-purple fw-bold">{{ sc.required_level }} / 5</span>
+                        </td>
+                        <td class="text-center">
+                            {% if sc.gap > 0 %}
+                                <span class="badge bg-danger-subtle text-danger fw-bold">-{{ sc.gap }}</span>
+                            {% else %}
+                                <span class="badge bg-success-subtle text-success fw-bold"><i class="fa-solid fa-check"></i> 0</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if sc.status == 'Proficient' %}
+                                <span class="status-pill status-pill-proficient"><i class="fa-solid fa-circle-check me-1"></i>Proficient</span>
+                            {% elif sc.status == 'Weak' %}
+                                <span class="status-pill status-pill-weak"><i class="fa-solid fa-triangle-exclamation me-1"></i>Weak</span>
+                            {% else %}
+                                <span class="status-pill status-pill-missing"><i class="fa-solid fa-circle-xmark me-1"></i>Missing</span>
+                            {% endif %}
+                        </td>
+                        <td class="small text-muted">
+                            {{ sc.suggestion }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chartLabels = {{ analysis.chart_data.labels | tojson }};
+    const currentData = {{ analysis.chart_data.current | tojson }};
+    const requiredData = {{ analysis.chart_data.required | tojson }};
+
+    // 1. Radar Chart
+    const radarCtx = document.getElementById('skillRadarChart').getContext('2d');
+    new Chart(radarCtx, {
+        type: 'radar',
+        data: {
+            labels: chartLabels,
+            datasets: [
+                {
+                    label: 'Current Level',
+                    data: currentData,
+                    backgroundColor: 'rgba(79, 70, 229, 0.25)',
+                    borderColor: '#4F46E5',
+                    pointBackgroundColor: '#4F46E5',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: '#4F46E5',
+                    borderWidth: 2
+                },
+                {
+                    label: 'Required Benchmark',
+                    data: requiredData,
+                    backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                    borderColor: '#EF4444',
+                    borderDash: [4, 4],
+                    pointBackgroundColor: '#EF4444',
+                    pointBorderColor: '#fff',
+                    borderWidth: 2
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                r: {
+                    angleLines: { color: '#E2E8F0' },
+                    grid: { color: '#E2E8F0' },
+                    suggestedMin: 0,
+                    suggestedMax: 5,
+                    ticks: { stepSize: 1, backdropColor: 'transparent' },
+                    pointLabels: { font: { size: 11, weight: '600' } }
+                }
+            },
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // 2. Bar Chart
+    const barCtx = document.getElementById('skillBarChart').getContext('2d');
+    new Chart(barCtx, {
+        type: 'bar',
+        data: {
+            labels: chartLabels,
+            datasets: [
+                {
+                    label: 'Current Level',
+                    data: currentData,
+                    backgroundColor: '#2563EB',
+                    borderRadius: 6
+                },
+                {
+                    label: 'Required Benchmark',
+                    data: requiredData,
+                    backgroundColor: '#C7D2FE',
+                    borderRadius: 6
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 5,
+                    ticks: { stepSize: 1 },
+                    grid: { color: '#F1F5F9' }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { font: { size: 10 } }
+                }
+            },
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,469 @@
+/* =========================================================
+   AI-POWERED SKILL GAP ANALYZER & CAREER GUIDANCE
+   Professional Modern UI Palette: Deep Blues, Purples, Whites
+   ========================================================= */
+
+:root {
+    --primary-blue: #2563EB;
+    --primary-blue-dark: #1D4ED8;
+    --primary-purple: #7C3AED;
+    --primary-purple-dark: #6D28D9;
+    --accent-indigo: #4F46E5;
+    --accent-teal: #0D9488;
+    
+    --bg-main: #F8FAFC;
+    --bg-card: #FFFFFF;
+    --text-main: #0F172A;
+    --text-muted: #64748B;
+    --border-color: #E2E8F0;
+    
+    --gradient-hero: linear-gradient(135deg, #1E1B4B 0%, #312E81 40%, #1D4ED8 100%);
+    --gradient-accent: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+    --gradient-card: linear-gradient(135deg, #F8FAFC 0%, #EFF6FF 100%);
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.08), 0 2px 4px -1px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -2px rgba(0,0,0,0.03);
+    --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2, h3, h4, h5, h6, .brand-title {
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+}
+
+/* =========================================================
+   NAVBAR & BRANDING
+   ========================================================= */
+.main-navbar {
+    background: linear-gradient(90deg, #1E1B4B 0%, #2E1065 50%, #1E3A8A 100%);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.brand-logo-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--gradient-accent);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    font-size: 1.25rem;
+    box-shadow: 0 4px 10px rgba(124, 58, 237, 0.4);
+}
+
+.brand-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+.brand-ai {
+    background: linear-gradient(135deg, #60A5FA, #C084FC);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 900;
+    margin-left: 2px;
+}
+
+.brand-subtitle {
+    font-size: 0.70rem;
+    color: #CBD5E1;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.navbar-nav .nav-link {
+    color: #E2E8F0 !important;
+    font-weight: 500;
+    font-size: 0.925rem;
+    padding: 0.5rem 0.85rem !important;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.avatar-circle {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: var(--gradient-accent);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-user-profile {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 30px;
+    padding: 3px 12px 3px 4px;
+    transition: all 0.2s ease;
+}
+
+.btn-user-profile:hover {
+    background: rgba(255, 255, 255, 0.16);
+}
+
+.db-status-badge {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #E0E7FF;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #10B981;
+    box-shadow: 0 0 6px #10B981;
+}
+
+/* =========================================================
+   HERO & BANNERS
+   ========================================================= */
+.hero-section {
+    background: var(--gradient-hero);
+    color: white;
+    padding: 80px 0 90px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, rgba(37, 99, 235, 0) 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1.15;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #60A5FA 0%, #C084FC 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-subtitle {
+    font-size: 1.15rem;
+    color: #CBD5E1;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   CARDS & CONTAINERS
+   ========================================================= */
+.app-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.app-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.app-card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header-custom {
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem 1.5rem;
+}
+
+/* Color Accents & Badges */
+.bg-purple-soft {
+    background-color: #F3E8FF;
+}
+
+.text-purple {
+    color: var(--primary-purple);
+}
+
+.bg-blue-soft {
+    background-color: #DBEAFE;
+}
+
+.text-blue {
+    color: var(--primary-blue);
+}
+
+.bg-emerald-soft {
+    background-color: #D1FAE5;
+}
+
+.text-emerald {
+    color: #059669;
+}
+
+.bg-amber-soft {
+    background-color: #FEF3C7;
+}
+
+.text-amber {
+    color: #D97706;
+}
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+.btn-primary-gradient {
+    background: var(--gradient-accent);
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+    padding: 0.625rem 1.35rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.35);
+    transition: all 0.2s ease;
+}
+
+.btn-primary-gradient:hover {
+    background: linear-gradient(135deg, #4338CA 0%, #6D28D9 100%);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.45);
+    transform: translateY(-1px);
+}
+
+.btn-blue-gradient {
+    background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    transition: all 0.2s ease;
+}
+
+.btn-blue-gradient:hover {
+    background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%);
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   SKILL ASSESSMENT FORM (1-5 Rating Component)
+   ========================================================= */
+.skill-card {
+    background: #ffffff;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.skill-card:hover {
+    border-color: #C7D2FE;
+    box-shadow: var(--shadow-sm);
+}
+
+.rating-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.rating-label {
+    flex: 1;
+    text-align: center;
+    padding: 8px 4px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    background: #F8FAFC;
+    transition: all 0.15s ease;
+}
+
+.rating-group input[type="radio"] {
+    display: none;
+}
+
+.rating-group input[type="radio"]:checked + .rating-label {
+    background: var(--gradient-accent);
+    color: #ffffff;
+    border-color: transparent;
+    box-shadow: 0 2px 6px rgba(124, 58, 237, 0.4);
+    transform: scale(1.04);
+}
+
+.rating-label:hover {
+    border-color: #A5B4FC;
+    background: #EEF2FF;
+    color: var(--accent-indigo);
+}
+
+/* =========================================================
+   CAREER RECOMMENDATION CARDS
+   ========================================================= */
+.rec-rank-badge {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.rank-1-badge {
+    background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(245, 158, 11, 0.4);
+}
+
+.rank-2-badge {
+    background: linear-gradient(135deg, #94A3B8 0%, #64748B 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(100, 116, 139, 0.3);
+}
+
+.rank-3-badge {
+    background: linear-gradient(135deg, #D97706 0%, #B45309 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3);
+}
+
+.confidence-bar-container {
+    height: 10px;
+    background-color: #E2E8F0;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.confidence-bar-fill {
+    height: 100%;
+    border-radius: 20px;
+    background: var(--gradient-accent);
+    transition: width 1s ease-in-out;
+}
+
+/* =========================================================
+   SKILL GAP METRICS & PILLS
+   ========================================================= */
+.status-pill {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pill-proficient {
+    background-color: #D1FAE5;
+    color: #065F46;
+}
+
+.status-pill-weak {
+    background-color: #FEF3C7;
+    color: #92400E;
+}
+
+.status-pill-missing {
+    background-color: #FEE2E2;
+    color: #991B1B;
+}
+
+.metric-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+
+/* =========================================================
+   LEARNING ROADMAP MODULE
+   ========================================================= */
+.roadmap-timeline {
+    position: relative;
+    padding-left: 28px;
+}
+
+.roadmap-timeline::before {
+    content: '';
+    position: absolute;
+    left: 8px;
+    top: 10px;
+    bottom: 10px;
+    width: 2px;
+    background-color: #CBD5E1;
+}
+
+.roadmap-topic-card {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.topic-checkbox {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: var(--primary-purple);
+}
+
+.topic-completed-strike {
+    text-decoration: line-through;
+    color: #94A3B8 !important;
+}
+
+/* =========================================================
+   RESPONSIVE TWEAKS
+   ========================================================= */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    .rating-group {
+        flex-wrap: wrap;
+    }
+    .rating-label {
+        min-width: calc(20% - 8px);
+    }
+}

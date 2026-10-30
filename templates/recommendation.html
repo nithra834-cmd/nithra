@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}AI Career Recommendations - AI Career Guidance{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Banner -->
+    <div class="app-card p-4 p-md-5 mb-4" style="background: var(--gradient-card);">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <span class="badge bg-purple-soft text-purple fw-bold px-3 py-1 rounded-pill mb-2">Step 2: AI Predictions</span>
+                <h2 class="fw-bold text-dark mb-2">Your Top Career Recommendations</h2>
+                <p class="text-muted mb-0">
+                    Based on your skill ratings and stated career interests, our Random Forest Machine Learning model has identified the 
+                    <strong>Top 3 career paths</strong> where your competencies give you the strongest competitive advantage.
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+                <a href="{{ url_for('skills') }}" class="btn btn-outline-primary rounded-pill px-3 shadow-sm">
+                    <i class="fa-solid fa-rotate me-1"></i> Retake Skill Assessment
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendations Cards -->
+    <div class="row g-4 mb-5">
+        {% for rec in recommendations %}
+            {% set rank_class = 'rank-1-badge' if rec.rank_order == 1 else ('rank-2-badge' if rec.rank_order == 2 else 'rank-3-badge') %}
+            <div class="col-lg-4 col-md-6">
+                <div class="app-card app-card-hover p-4 h-100 d-flex flex-column justify-content-between border-top border-4 {% if rec.rank_order == 1 %}border-warning{% elif rec.rank_order == 2 %}border-secondary{% else %}border-info{% endif %}">
+                    <div>
+                        <!-- Header & Badge -->
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="rec-rank-badge {{ rank_class }}">
+                                #{{ rec.rank_order }}
+                            </div>
+                            <div class="text-end">
+                                <span class="badge bg-purple-soft text-purple fw-bold px-2 py-1">
+                                    {{ rec.match_score }}% Match
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Career Title & Description -->
+                        <h4 class="fw-bold text-dark mb-2">{{ rec.career_title }}</h4>
+                        <p class="text-muted small mb-3">
+                            {{ rec.career_desc }}
+                        </p>
+
+                        <!-- Market Demand and Salary -->
+                        <div class="p-3 bg-light rounded-3 mb-3 small">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="text-muted"><i class="fa-solid fa-coins text-warning me-1"></i>Avg. Salary:</span>
+                                <span class="fw-bold text-dark">{{ rec.avg_salary }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted"><i class="fa-solid fa-arrow-trend-up text-success me-1"></i>Demand:</span>
+                                <span class="fw-bold text-success">{{ rec.industry_demand }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Confidence Bar -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between small text-muted mb-1">
+                                <span>AI Confidence Score</span>
+                                <span class="fw-bold text-primary">{{ rec.match_score }}%</span>
+                            </div>
+                            <div class="confidence-bar-container">
+                                <div class="confidence-bar-fill" style="width: {{ rec.match_score }}%;"></div>
+                            </div>
+                        </div>
+
+                        <!-- Influencing Factors / Rationale -->
+                        <div class="p-3 rounded-3 border bg-white mb-3">
+                            <div class="small fw-bold text-purple mb-1">
+                                <i class="fa-solid fa-lightbulb me-1"></i> AI Influencing Factors:
+                            </div>
+                            <p class="text-muted small mb-0" style="font-size: 0.825rem;">
+                                {{ rec.explanation }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2 pt-2">
+                        <a href="{{ url_for('skill_gap', career_id=rec.career_id) }}" class="btn btn-outline-primary btn-sm rounded-pill fw-semibold">
+                            <i class="fa-solid fa-chart-pie me-1"></i> Analyze Skill Gaps
+                        </a>
+                        <a href="{{ url_for('roadmap', career_id=rec.career_id) }}" class="btn btn-primary-gradient btn-sm rounded-pill fw-semibold">
+                            <i class="fa-solid fa-route me-1"></i> View Learning Roadmap
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Why this works banner -->
+    <div class="app-card p-4 bg-white">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h5 class="fw-bold text-dark mb-1"><i class="fa-solid fa-circle-info text-primary me-2"></i>How the AI Model Generates Predictions</h5>
+                <p class="text-muted small mb-0">
+                    Predictions are computed using a supervised <strong>Random Forest Ensemble</strong> trained on thousands of verified student skill profiles.
+                    The probabilities reflect multi-tree consensus across technical foundations, soft skills, and industry role benchmarks.
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                <a href="{{ url_for('skill_gap') }}" class="btn btn-blue-gradient px-4 py-2">
+                    Start Gap Analysis <i class="fa-solid fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

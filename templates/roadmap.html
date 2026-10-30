@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Personalized Learning Roadmap - AI Career Guidance{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Header Banner -->
+    <div class="app-card p-4 p-md-5 mb-4" style="background: var(--gradient-card);">
+        <div class="row align-items-center justify-content-between g-3">
+            <div class="col-lg-7">
+                <span class="badge bg-purple-soft text-purple fw-bold px-3 py-1 rounded-pill mb-2">Step 4: Step-by-Step Pathway</span>
+                <h2 class="fw-bold text-dark mb-2">
+                    Learning Roadmap: <span class="text-primary">{{ roadmap.career.career_title }}</span>
+                </h2>
+                <p class="text-muted mb-0">
+                    Tiered curriculum divided into Beginner, Intermediate, and Advanced milestones with hands-on practice projects.
+                </p>
+            </div>
+            <div class="col-lg-5 text-lg-end">
+                <div class="d-inline-flex flex-column align-items-lg-end">
+                    <label class="form-label small fw-bold text-muted mb-1">Switch Career Track:</label>
+                    <select class="form-select form-select-sm shadow-sm" onchange="window.location.href='/roadmap/' + this.value" style="min-width: 240px;">
+                        {% for c in all_careers %}
+                            <option value="{{ c.id }}" {% if c.id == roadmap.career.id %}selected{% endif %}>
+                                {{ c.career_title }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Live Progress Bar Card -->
+    <div class="app-card p-4 mb-4">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-2">
+            <div>
+                <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-bars-progress text-primary me-2"></i>Curriculum Completion</h5>
+                <span class="text-muted small">Check off items as you study. Your progress is saved automatically.</span>
+            </div>
+            <div class="h4 fw-bold text-primary mb-0" id="stat-progress-percent">
+                {{ roadmap.progress_percentage }}%
+            </div>
+        </div>
+
+        <div class="progress mb-3" style="height: 12px; border-radius: 10px; background-color: #E2E8F0;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
+                 role="progressbar" 
+                 id="stat-progress-bar"
+                 style="width: {{ roadmap.progress_percentage }}%;" 
+                 aria-valuenow="{{ roadmap.progress_percentage }}" 
+                 aria-valuemin="0" 
+                 aria-valuemax="100"></div>
+        </div>
+
+        <div class="row g-2 text-center small text-muted">
+            <div class="col-4">
+                <span class="fw-bold text-dark" id="stat-total-topics">{{ roadmap.total_topics }}</span> Total Topics
+            </div>
+            <div class="col-4 border-start border-end">
+                <span class="fw-bold text-success" id="stat-completed-topics">{{ roadmap.completed_topics }}</span> Completed
+            </div>
+            <div class="col-4">
+                <span class="fw-bold text-warning" id="stat-pending-topics">{{ roadmap.pending_topics }}</span> Pending
+            </div>
+        </div>
+    </div>
+
+    <!-- Tiered Curriculum (Beginner, Intermediate, Advanced) -->
+    {% set tiers = [
+        ('Beginner', 'fa-seedling', 'bg-emerald-soft text-emerald', 'Foundational concepts, syntax, environment setup & core fundamentals.'),
+        ('Intermediate', 'fa-fire-flame-curved', 'bg-blue-soft text-blue', 'Architectural patterns, libraries, data processing & intermediate tooling.'),
+        ('Advanced', 'fa-trophy', 'bg-purple-soft text-purple', 'System design, optimization, enterprise frameworks & full deployment.')
+    ] %}
+
+    {% for tier_name, tier_icon, badge_style, tier_desc in tiers %}
+    <div class="mb-5">
+        <div class="d-flex align-items-center gap-3 mb-3 pb-2 border-bottom">
+            <div class="brand-logo-icon {{ badge_style }}" style="width: 36px; height: 36px; font-size: 1.1rem;">
+                <i class="fa-solid {{ tier_icon }}"></i>
+            </div>
+            <div>
+                <h4 class="fw-bold text-dark mb-0">{{ tier_name }} Level Milestones</h4>
+                <div class="text-muted small">{{ tier_desc }}</div>
+            </div>
+        </div>
+
+        <div class="row g-3">
+            {% set topics = roadmap.roadmap_by_level.get(tier_name, []) %}
+            {% if topics %}
+                {% for t in topics %}
+                <div class="col-lg-6">
+                    <div class="app-card p-4 h-100 roadmap-topic-card {% if t.is_completed %}bg-light{% endif %}" id="topic-card-{{ t.id }}">
+                        <div class="d-flex align-items-start gap-3">
+                            <div>
+                                <input type="checkbox" 
+                                       class="topic-checkbox topic-progress-toggle mt-1" 
+                                       id="check_{{ t.id }}" 
+                                       data-topic-id="{{ t.id }}"
+                                       data-career-id="{{ roadmap.career.id }}"
+                                       {% if t.is_completed %}checked{% endif %}>
+                            </div>
+                            <div class="flex-grow-1">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="badge bg-purple-soft text-purple fw-bold">{{ t.skill_name }}</span>
+                                    <span class="small text-muted" style="font-size: 0.75rem;">{{ tier_name }} Tier</span>
+                                </div>
+                                <h6 class="fw-bold text-dark mb-2 {% if t.is_completed %}topic-completed-strike{% endif %}" id="topic-title-{{ t.id }}">
+                                    {{ t.topic_name }}
+                                </h6>
+                                
+                                <!-- Resources & Practice Project -->
+                                <div class="p-3 rounded-3 bg-light border mb-2 small">
+                                    <div class="mb-1">
+                                        <strong class="text-dark"><i class="fa-solid fa-book-open text-primary me-1"></i>Curated Resources:</strong>
+                                        <div class="text-muted">{{ t.resources_info }}</div>
+                                    </div>
+                                    <div>
+                                        <strong class="text-dark"><i class="fa-solid fa-laptop-code text-purple me-1"></i>Practice Project:</strong>
+                                        <div class="text-muted">{{ t.practice_project }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-12">
+                    <div class="p-3 text-center text-muted border rounded-3 bg-white">
+                        No specific {{ tier_name | lower }} requirements for this track.
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

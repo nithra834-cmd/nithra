@@ -1,0 +1,344 @@
+{% extends "base.html" %}
+
+{% block title %}Student Dashboard - AI Career Guidance{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Welcome Header Banner -->
+    <div class="app-card p-4 p-md-5 mb-4" style="background: var(--gradient-card);">
+        <div class="row align-items-center justify-content-between g-3">
+            <div class="col-lg-8">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-purple-soft text-purple fw-bold px-3 py-1 rounded-pill">Student Analytics Dashboard</span>
+                    <span class="badge bg-emerald-soft text-emerald fw-semibold">Live Real-Time Data</span>
+                </div>
+                <h2 class="fw-bold text-dark mb-1">
+                    Welcome back, {{ current_student.full_name }}! 👋
+                </h2>
+                <p class="text-muted mb-0">
+                    {{ current_student.college_name or 'Engineering College' }} &bull; 
+                    {{ current_student.department or 'Computer Science' }} &bull; 
+                    {{ current_student.year_of_study or 'Undergraduate' }}
+                </p>
+            </div>
+            <div class="col-lg-4 text-lg-end">
+                <a href="{{ url_for('skills') }}" class="btn btn-primary-gradient px-4 py-2 shadow-sm">
+                    <i class="fa-solid fa-sliders me-2"></i> Update Skill Assessment
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats Cards -->
+    <div class="row g-3 mb-4">
+        <!-- 1. Total Assessed Skills -->
+        <div class="col-xl-3 col-md-6">
+            <div class="app-card p-3 h-100">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small fw-bold text-uppercase">Assessed Skills</div>
+                        <div class="h3 fw-bold text-dark mb-0">{{ total_assessed }} / 15</div>
+                    </div>
+                    <div class="brand-logo-icon bg-blue-soft text-blue">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                </div>
+                <div class="small text-muted mt-2">
+                    11 Technical &bull; 4 Soft Skills
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Top Career Match -->
+        <div class="col-xl-3 col-md-6">
+            <div class="app-card p-3 h-100">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small fw-bold text-uppercase">Top AI Match</div>
+                        <div class="h5 fw-bold text-primary mb-0 text-truncate" style="max-width: 170px;">
+                            {{ top_career.career_title if top_career else 'Take Assessment' }}
+                        </div>
+                    </div>
+                    <div class="brand-logo-icon bg-purple-soft text-purple">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                </div>
+                <div class="small text-muted mt-2">
+                    {% if top_career %}
+                        <span class="fw-bold text-success">{{ top_career.match_score }}% Confidence</span>
+                    {% else %}
+                        No predictions yet
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Skill Gap Score -->
+        <div class="col-xl-3 col-md-6">
+            <div class="app-card p-3 h-100">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small fw-bold text-uppercase">Role Benchmark Match</div>
+                        <div class="h3 fw-bold text-emerald mb-0">
+                            {{ gap_data.overall_match_score if gap_data else 0 }}%
+                        </div>
+                    </div>
+                    <div class="brand-logo-icon bg-emerald-soft text-emerald">
+                        <i class="fa-solid fa-chart-pie"></i>
+                    </div>
+                </div>
+                <div class="small text-muted mt-2">
+                    {{ gap_data.overall_gap_score if gap_data else 0 }}% skill gap remaining
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. Roadmap Progress -->
+        <div class="col-xl-3 col-md-6">
+            <div class="app-card p-3 h-100">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="text-muted small fw-bold text-uppercase">Learning Progress</div>
+                        <div class="h3 fw-bold text-purple mb-0">
+                            {{ roadmap_metrics.progress_percentage if roadmap_metrics else 0 }}%
+                        </div>
+                    </div>
+                    <div class="brand-logo-icon bg-amber-soft text-amber">
+                        <i class="fa-solid fa-route"></i>
+                    </div>
+                </div>
+                <div class="small text-muted mt-2">
+                    {{ roadmap_metrics.completed_topics if roadmap_metrics else 0 }} of {{ roadmap_metrics.total_topics if roadmap_metrics else 0 }} milestones done
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 1: Assessed Skills Bar Chart & Top Recommendations -->
+    <div class="row g-4 mb-4">
+        <!-- Bar Chart: Assessed Skills -->
+        <div class="col-lg-8">
+            <div class="app-card p-4 h-100">
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                    <div>
+                        <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-chart-column text-primary me-2"></i>My Skill Ratings Profile</h5>
+                        <div class="text-muted small">Current proficiency ratings from your latest assessment (1 to 5)</div>
+                    </div>
+                    <a href="{{ url_for('skills') }}" class="btn btn-sm btn-outline-primary rounded-pill">Edit</a>
+                </div>
+                <div style="position: relative; height: 320px;">
+                    <canvas id="studentSkillsBarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Doughnut Chart: Learning Milestones Progress -->
+        <div class="col-lg-4">
+            <div class="app-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-chart-pie text-purple me-2"></i>Curriculum State</h5>
+                    </div>
+                    <div style="position: relative; height: 220px;">
+                        <canvas id="roadmapDoughnutChart"></canvas>
+                    </div>
+                </div>
+                <div class="p-3 bg-light rounded-3 mt-3">
+                    <div class="d-flex justify-content-between small mb-1">
+                        <span class="text-muted"><i class="fa-solid fa-circle-check text-success me-1"></i>Completed Topics:</span>
+                        <strong class="text-dark">{{ roadmap_metrics.completed_topics if roadmap_metrics else 0 }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between small">
+                        <span class="text-muted"><i class="fa-solid fa-clock text-warning me-1"></i>Pending Topics:</span>
+                        <strong class="text-dark">{{ roadmap_metrics.pending_topics if roadmap_metrics else 0 }}</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row 2: Radar Gap Comparison & Top Career Recommendation Cards -->
+    <div class="row g-4 mb-4">
+        <!-- Radar Chart: Skill Gap Analysis against Top Career -->
+        <div class="col-lg-6">
+            <div class="app-card p-4 h-100">
+                <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                    <div>
+                        <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-chart-radar text-purple me-2"></i>Skill Gap Radar: {{ top_career.career_title if top_career else 'Benchmark' }}</h5>
+                        <div class="text-muted small">Direct comparison of your ratings vs industry standards</div>
+                    </div>
+                    <a href="{{ url_for('skill_gap') }}" class="btn btn-sm btn-outline-secondary rounded-pill">Full Gap View</a>
+                </div>
+                <div style="position: relative; height: 300px;">
+                    <canvas id="dashboardRadarChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Career Recommendations Card List -->
+        <div class="col-lg-6">
+            <div class="app-card p-4 h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+                        <h5 class="fw-bold text-dark mb-0"><i class="fa-solid fa-trophy text-warning me-2"></i>Top Matched Tech Roles</h5>
+                        <a href="{{ url_for('recommendation') }}" class="small text-primary text-decoration-none fw-semibold">View All Details &rarr;</a>
+                    </div>
+
+                    {% if top_recs %}
+                        <div class="d-flex flex-column gap-3">
+                            {% for rec in top_recs %}
+                            <div class="p-3 border rounded-3 bg-white d-flex align-items-center justify-content-between">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="rec-rank-badge {% if rec.rank_order == 1 %}rank-1-badge{% elif rec.rank_order == 2 %}rank-2-badge{% else %}rank-3-badge{% endif %}" style="width: 36px; height: 36px; font-size: 1rem;">
+                                        #{{ rec.rank_order }}
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold text-dark mb-0">{{ rec.career_title }}</h6>
+                                        <div class="small text-muted">{{ rec.avg_salary }} &bull; {{ rec.industry_demand }} Demand</div>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-purple-soft text-purple fw-bold">{{ rec.match_score }}% Match</span>
+                                    <div class="mt-1">
+                                        <a href="{{ url_for('roadmap', career_id=rec.career_id) }}" class="btn btn-sm btn-light border py-0 px-2" style="font-size: 0.75rem;">
+                                            Roadmap
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-4 text-muted">
+                            <i class="fa-solid fa-compass fs-1 mb-2 text-muted"></i>
+                            <p>No recommendations yet. Complete your skill assessment to generate your personalized career analysis.</p>
+                            <a href="{{ url_for('skills') }}" class="btn btn-primary-gradient btn-sm">Take Skill Assessment</a>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="mt-4 pt-3 border-top d-flex justify-content-between align-items-center small text-muted">
+                    <span>Database: {{ db_status.type }}</span>
+                    <span>Algorithm: Random Forest (150 Estimators)</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // 1. Student Skills Bar Chart
+    const skillsLabels = {{ skills_chart_labels | tojson }};
+    const skillsRatings = {{ skills_chart_ratings | tojson }};
+
+    if (skillsLabels.length > 0) {
+        const barCtx = document.getElementById('studentSkillsBarChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: skillsLabels,
+                datasets: [{
+                    label: 'My Rating (1-5)',
+                    data: skillsRatings,
+                    backgroundColor: skillsRatings.map(val => val >= 4 ? '#10B981' : (val >= 3 ? '#2563EB' : '#F59E0B')),
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 5,
+                        ticks: { stepSize: 1 }
+                    },
+                    x: {
+                        ticks: { font: { size: 10 } }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+    }
+
+    // 2. Learning Milestones Doughnut Chart
+    const completedTopics = {{ roadmap_metrics.completed_topics if roadmap_metrics else 0 }};
+    const pendingTopics = {{ roadmap_metrics.pending_topics if roadmap_metrics else 0 }};
+    const doughnutCtx = document.getElementById('roadmapDoughnutChart').getContext('2d');
+    new Chart(doughnutCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Completed', 'Pending'],
+            datasets: [{
+                data: [completedTopics, pendingTopics > 0 ? pendingTopics : (completedTopics === 0 ? 1 : 0)],
+                backgroundColor: ['#10B981', '#E2E8F0'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '72%',
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+
+    // 3. Radar Chart (Current vs Required for Top Career)
+    {% if gap_data and gap_data.chart_data %}
+        const radarLabels = {{ gap_data.chart_data.labels | tojson }};
+        const currentSeries = {{ gap_data.chart_data.current | tojson }};
+        const requiredSeries = {{ gap_data.chart_data.required | tojson }};
+
+        const radarCtx = document.getElementById('dashboardRadarChart').getContext('2d');
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: radarLabels,
+                datasets: [
+                    {
+                        label: 'My Current Level',
+                        data: currentSeries,
+                        backgroundColor: 'rgba(79, 70, 229, 0.25)',
+                        borderColor: '#4F46E5',
+                        borderWidth: 2,
+                        pointBackgroundColor: '#4F46E5'
+                    },
+                    {
+                        label: 'Benchmark',
+                        data: requiredSeries,
+                        backgroundColor: 'rgba(239, 68, 68, 0.15)',
+                        borderColor: '#EF4444',
+                        borderWidth: 2,
+                        borderDash: [4, 4],
+                        pointBackgroundColor: '#EF4444'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    r: {
+                        suggestedMin: 0,
+                        suggestedMax: 5,
+                        ticks: { stepSize: 1, backdropColor: 'transparent' },
+                        pointLabels: { font: { size: 10, weight: '600' } }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+    {% endif %}
+});
+</script>
+{% endblock %}
